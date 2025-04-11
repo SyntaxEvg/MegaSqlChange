@@ -77,7 +77,11 @@ namespace EFCoreTableScanner
                         if (row.ContainsKey(column) && row[column] != null)
                         {
                             string value = row[column].ToString();
+                            if (row[18] == "A_EA66EBA64700000D")
+                            {
+                                string value = row[column].ToString();
 
+                            }
                             if (!string.IsNullOrEmpty(value) && ContainsNonEnglishNonRussianChars(value))
                             {
                                 Console.WriteLine($"  Найдены недопустимые символы в столбце '{column}', ID: {rowId}");
