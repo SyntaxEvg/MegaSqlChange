@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -72,16 +73,33 @@ namespace EFCoreTableScanner
                         ? row[primaryKeyColumn].ToString()
                         : "неизвестный ID";
 
+                    try
+                    {
+                        var y = row["A_EA66EBA64700000D"];
+                        if (y != null && y == "RU")
+                        {
+                            //string value1 = row[column].ToString();
+
+                        }
+                        else
+                        {
+
+                            //Console.WriteLine();
+
+                        }
+                    } 
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"tableName:{tableName},ex.Message");
+                    }
+                   
+
                     foreach (var column in stringColumns)
                     {
                         if (row.ContainsKey(column) && row[column] != null)
                         {
                             string value = row[column].ToString();
-                            if (row[18] == "A_EA66EBA64700000D")
-                            {
-                                string value = row[column].ToString();
-
-                            }
+                            
                             if (!string.IsNullOrEmpty(value) && ContainsNonEnglishNonRussianChars(value))
                             {
                                 Console.WriteLine($"  Найдены недопустимые символы в столбце '{column}', ID: {rowId}");
