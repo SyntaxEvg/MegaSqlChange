@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-//ÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸàâæçéèêëîïôœùûüÿÄÖÜẞßäöüÁÉÍÑÓÚÜáéíñóúüĄĆĘŁŃÓŚŹŻąćęłńóśźżÇĞİIÖŞÜçğıiöşü
+//ÀÂÃÆÇÉÈÊËÎÏÔŒÙÛÜŸàâãæçéèêëîïôœùûüÿÄÖÜẞßäöüÁÉÍÑÓÔÕÚÜáéíñóôõúüĄĆĘŁŃÓŚŹŻąćęłńóśźżÇĞİIÖŞÜçğıiöşü
 
 //public class ConsoleLogger : ILogger
 //{
