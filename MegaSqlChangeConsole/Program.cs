@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
@@ -63,7 +64,6 @@ namespace EFCoreTableScanner
 
                 // Получаем имя первичного ключа (если есть)
                 var primaryKeyColumn = await GetPrimaryKeyColumnAsync(dbContext, tableName);
-
                 foreach (var row in rows)
                 {
                     bool rowModified = false;
@@ -72,27 +72,6 @@ namespace EFCoreTableScanner
                     string rowId = primaryKeyColumn != null && row.ContainsKey(primaryKeyColumn)
                         ? row[primaryKeyColumn].ToString()
                         : "неизвестный ID";
-
-                    try
-                    {
-                        var y = row["A_EA66EBA64700000D"];
-                        if (y != null && y == "RU")
-                        {
-                            //string value1 = row[column].ToString();
-
-                        }
-                        else
-                        {
-
-                            //Console.WriteLine();
-
-                        }
-                    } 
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"tableName:{tableName},ex.Message");
-                    }
-                   
 
                     foreach (var column in stringColumns)
                     {
@@ -115,9 +94,20 @@ namespace EFCoreTableScanner
                     }
 
                     // Обновляем запись, если были найдены проблемы
-                    if (rowModified && primaryKeyColumn != null)
+                    if (rowModified)
                     {
-                        await UpdateRowAsync(dbContext, tableName, primaryKeyColumn, row[primaryKeyColumn], updates);
+                        if (primaryKeyColumn != null && row.ContainsKey(primaryKeyColumn))
+                        {
+                            // Обновление по первичному ключу
+                            await UpdateRowAsync(dbContext, tableName, primaryKeyColumn, row[primaryKeyColumn], updates);
+                        }
+                        else
+                        {
+                            // Обновление по всем оригинальным значениям (как SSMS)
+                            var originalRow = row.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value);
+                            await UpdateRowLikeSSMSAsync(dbContext, tableName, originalRow, updates);
+                        }
+
                         tableModified = true;
                     }
                 }
@@ -227,21 +217,6 @@ namespace EFCoreTableScanner
             await dbContext.Database.OpenConnectionAsync();
 
             using var result = await command.ExecuteReaderAsync();
-
-            //if (dbContext.Database.IsSqlite())
-            //{
-            //    // Для SQLite обработка PRAGMA table_info
-            //    while (await result.ReadAsync())
-            //    {
-            //        bool isPk = result.GetBoolean(5); // pk column
-            //        if (isPk)
-            //        {
-            //            return result.GetString(1); // name column
-            //        }
-            //    }
-            //    return null;
-            //}
-            //else
             if (await result.ReadAsync())
             {
                 return result.GetString(0);
@@ -281,7 +256,7 @@ namespace EFCoreTableScanner
             return rows;
         }
 
-        // Обновление записи в таблице
+        // Обновление записи в таблице через ПМ
         static async Task UpdateRowAsync(DynamicDbContext dbContext, string tableName, string primaryKeyColumn, object primaryKeyValue, Dictionary<string, string> updates)
         {
             if (updates.Count == 0) return;
@@ -309,6 +284,46 @@ namespace EFCoreTableScanner
             await dbContext.Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
         }
+        static async Task UpdateRowLikeSSMSAsync(DbContext dbContext, string tableName, Dictionary<string, object> originalRow, Dictionary<string, string> updatedValues)
+        {
+            var setClauses = updatedValues.Select(kvp => $"{kvp.Key} = @set_{kvp.Key}").ToList();
+            var whereClauses = originalRow.Select(kvp =>
+                kvp.Value == null || kvp.Value == DBNull.Value
+                    ? $"{kvp.Key} IS NULL"
+                    : $"{kvp.Key} = @where_{kvp.Key}"
+            ).ToList();
+
+            string sql = $"UPDATE {tableName} SET {string.Join(", ", setClauses)} WHERE {string.Join(" AND ", whereClauses)}";
+
+            using var command = dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = sql;
+
+            foreach (var kvp in updatedValues)
+            {
+                var param = command.CreateParameter();
+                param.ParameterName = $"@set_{kvp.Key}";
+                param.Value = kvp.Value != null ? kvp.Value : DBNull.Value;
+                command.Parameters.Add(param);
+            }
+
+            foreach (var kvp in originalRow)
+            {
+                if (kvp.Value != null && kvp.Value != DBNull.Value)
+                {
+                    var param = command.CreateParameter();
+                    param.ParameterName = $"@where_{kvp.Key}";
+                    param.Value = kvp.Value;
+                    command.Parameters.Add(param);
+                }
+            }
+
+            if (command.Connection.State != ConnectionState.Open)
+                await command.Connection.OpenAsync();
+
+            int affected = await command.ExecuteNonQueryAsync();
+            Console.WriteLine($"Обновлено строк: {affected}");
+        }
+
 
         // Экранирование имени таблицы в зависимости от СУБД
         static string EscapeTableName(DynamicDbContext dbContext, string tableName)
