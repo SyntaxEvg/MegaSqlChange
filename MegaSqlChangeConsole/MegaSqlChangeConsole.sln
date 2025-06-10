@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MegaSqlChangeConsole", "Meg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "variantTranstext", "..\..\variantTranstext\variantTranstext.csproj", "{BF08BCC2-DA67-45C2-978B-631CE103BEAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateRandomVideoId", "..\..\GenerateRandomVideoId\GenerateRandomVideoId.csproj", "{568A2847-6A99-42A0-B650-D4FD372AFB01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BF08BCC2-DA67-45C2-978B-631CE103BEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF08BCC2-DA67-45C2-978B-631CE103BEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF08BCC2-DA67-45C2-978B-631CE103BEAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
