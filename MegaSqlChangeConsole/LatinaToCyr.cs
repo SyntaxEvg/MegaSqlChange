@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
+//ÄÖÜäöüßẞ
 
 //public class ConsoleLogger : ILogger
 //{
@@ -209,19 +209,39 @@ public class LatinaToCyr
 
         StringBuilder outStr = new StringBuilder();
 
-        for (int i = 0; i < str.Length - 1; i++)
+        int i = 0;
+        while (i < str.Length)
         {
-            string pair = str.Substring(i, 2);
-            if (arrayTranslateutf16.TryGetValue(pair, out char translated))
+            if (i + 1 < str.Length)
             {
-                outStr.Append(translated);
-                i++; // skip next char
+                string pair = str.Substring(i, 2);
+                if (arrayTranslateutf16.TryGetValue(pair, out char translated))
+                {
+                    outStr.Append(translated);
+                    i += 2; // обработали пару
+                    continue;
+                }
             }
-            else
-            {
-                outStr.Append(str[i]);
-            }
+
+            // либо последний символ, либо пара не найдена
+            outStr.Append(str[i]);
+            i++;
         }
+
+
+        //for (int i = 0; i < str.Length - 1; i++)
+        //{
+        //    string pair = str.Substring(i, 2);
+        //    if (arrayTranslateutf16.TryGetValue(pair, out char translated))
+        //    {
+        //        outStr.Append(translated);
+        //        i++; // skip next char
+        //    }
+        //    else
+        //    {
+        //        outStr.Append(str[i]);
+        //    }
+        //}
 
         // Append last char if not processed
         if (str.Length % 2 != 0)

@@ -358,7 +358,7 @@ namespace EFCoreTableScanner
             // - Русские буквы (а-яА-ЯёЁ)
             // - Цифры (0-9)
             // - Пробелы, знаки пунктуации и другие общие символы
-            var regex = new Regex(@"[^a-zA-Zа-яА-ЯёЁ0-9\s\.,;:!?@#$%^&*()_+\-=\[\]{}|\\/<>~`'""]");
+            var regex = new Regex(@"[^a-zA-Zа-яА-ЯёЁ0-9\s\.,;:!?@#$%^&*()_+\-=\[\]{}|\\/<>~`'""]",RegexOptions.Compiled);
             return regex.IsMatch(text);
         }
 
