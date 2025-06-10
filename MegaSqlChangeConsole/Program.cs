@@ -255,6 +255,10 @@ namespace EFCoreTableScanner
 
             return rows;
         }
+        public static bool ContainsFrenchOrTurkishChars(string text)
+        {
+            return Regex.IsMatch(text, @"[éèêëàâùûçîïôœÉÈÊËÀÂÙÛÇÎÏÔŒçğıöşüİĞÖŞÜ]");
+        }
 
         // Обновление записи в таблице через ПМ
         static async Task UpdateRowAsync(DynamicDbContext dbContext, string tableName, string primaryKeyColumn, object primaryKeyValue, Dictionary<string, string> updates)
