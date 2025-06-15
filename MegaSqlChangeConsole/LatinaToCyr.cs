@@ -36,7 +36,78 @@ public static class EncodingAnalyzer
         return expectedPatterns.Any(pattern => Regex.IsMatch(text, pattern));
     }
 }
+public static class EncodingDetector
+{
+    // Паттерны для определения "сломанной" кодировки
+    private static readonly string[] BrokenPatterns = new[]
+    {
+        @"Ð\w", // Находит символы начинающиеся с Ð
+        @"Ñ\w", // Находит символы начинающиеся с Ñ
+        @"[\xC0-\xDF][\x80-\xBF]", // UTF-8 двухбайтовые последовательности
+        @"[\xE0-\xEF][\x80-\xBF]{2}", // UTF-8 трехбайтовые последовательности
+       // @"â€™|â€"|â€œ|â€\w", // Типичные признаки неправильной кодировки
+        @"Ð¸|Ð¹|Ðº|Ð»|Ð¼|Ð½|Ð¾|Ð¿" // Часто встречающиеся последовательности
+    };
 
+    public static bool IsBrokenEncoding(string text)
+    {
+        foreach (var pattern in BrokenPatterns)
+        {
+            if (Regex.IsMatch(text, pattern))
+                return true;
+        }
+        return false;
+    }
+
+    public static string FixEncoding(string text)
+    {
+        if (!IsBrokenEncoding(text))
+            return text;
+
+        try
+        {
+            // Пробуем исправить кодировку
+            byte[] bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(text);
+            return Encoding.UTF8.GetString(bytes);
+        }
+        catch
+        {
+            return text;
+        }
+    }
+
+    // Более сложный метод с проверкой различных паттернов
+    public static string FixEncodingWithPatterns(string text)
+    {
+        // Паттерны замены
+        var replacements = new Dictionary<string, string>
+        {
+            {@"Ð°", "а"},
+            {@"Ð±", "б"},
+            {@"Ð²", "в"},
+            // Добавьте другие соответствия по необходимости
+        };
+
+        foreach (var replacement in replacements)
+        {
+            text = Regex.Replace(text, replacement.Key, replacement.Value);
+        }
+
+        return text;
+    }
+
+    // Метод для определения типа неправильной кодировки
+    public static string DetectEncodingType(string text)
+    {
+        if (Regex.IsMatch(text, @"Ð\w"))
+            return "Возможно UTF-8 как Latin-1";
+
+        if (Regex.IsMatch(text, @"Ã¢â‚¬â„¢"))
+            return "Множественное неправильное декодирование";
+
+        return "Неизвестный тип кодировки";
+    }
+}
 
 //ÀÂÃÆÇÉÈÊËÎÏÔŒÙÛÜŸàâãæçéèêëîïôœùûüÿÄÖÜẞßäöüÁÉÍÑÓÔÕÚÜáéíñóôõúüĄĆĘŁŃÓŚŹŻąćęłńóśźżÇĞİIÖŞÜçğıiöşü
 
