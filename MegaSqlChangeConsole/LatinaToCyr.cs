@@ -3,7 +3,38 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
+public static void DecodeString(string input)
+{
+    try
+    {
+        // Способ 1: Через Windows-1252 в UTF-8
+        byte[] bytes = Encoding.GetEncoding("Windows-1252").GetBytes(input);
+        string result1 = Encoding.UTF8.GetString(bytes);
+        Console.WriteLine("Способ 1: " + result1);
 
+        // Способ 2: Двойное декодирование UTF-8
+        byte[] utf8Bytes = Encoding.UTF8.GetBytes(input);
+        string result2 = Encoding.UTF8.GetString(utf8Bytes);
+        Console.WriteLine("Способ 2: " + result2);
+
+        // Способ 3: ISO-8859-1 в UTF-8
+        byte[] isoBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
+        string result3 = Encoding.UTF8.GetString(isoBytes);
+        Console.WriteLine("Способ 3: " + result3);
+
+        // Способ 4: Попытка исправить двойное кодирование UTF-8
+        byte[] bytes4 = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
+        string intermediate = Encoding.UTF8.GetString(bytes4);
+        byte[] bytes4_2 = Encoding.GetEncoding("ISO-8859-1").GetBytes(intermediate);
+        string result4 = Encoding.UTF8.GetString(bytes4_2);
+        Console.WriteLine("Способ 4: " + result4);
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ошибка: {ex.Message}");
+    }
+}
 
 foreach (var encInfo in Encoding.GetEncodings())
 {
