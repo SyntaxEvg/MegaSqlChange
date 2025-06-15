@@ -4,6 +4,29 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 
+
+foreach (var encInfo in Encoding.GetEncodings())
+{
+    try
+    {
+        Encoding encoding = encInfo.GetEncoding();
+
+        string decoded = encoding.GetString(bytes);
+
+        // Фильтрация: покажем только читаемые строки
+        if (ContainsReadableText(decoded))
+        {
+            Console.WriteLine($"[{encoding.CodePage}] {encoding.EncodingName} ({encoding.WebName})");
+            Console.WriteLine($"→ {decoded}");
+            Console.WriteLine(new string('-', 50));
+        }
+    }
+    catch (Exception ex)
+    {
+        // Некоторые кодировки могут не поддерживаться или вызвать ошибку
+        Console.WriteLine($"Ошибка при использовании кодировки {encInfo.Name}: {ex.Message}");
+    }
+}
 static string CleanString(string input)
 {
     StringBuilder sb = new StringBuilder(input.Length);
