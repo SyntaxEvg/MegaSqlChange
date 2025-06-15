@@ -3,6 +3,48 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
+
+static string CleanString(string input)
+{
+    StringBuilder sb = new StringBuilder(input.Length);
+
+    foreach (char c in input)
+    {
+        if (IsAllowedChar(c))
+        {
+            sb.Append(c);
+        }
+    }
+
+    return sb.ToString();
+}
+
+static bool IsAllowedChar(char c)
+{
+    // Латиница
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+        return true;
+
+    // Кириллица (включая ё и Ё)
+    if ((c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || c == 'ё' || c == 'Ё')
+        return true;
+
+    // Цифры
+    if (c >= '0' && c <= '9')
+        return true;
+
+    // Пробельные символы
+    if (char.IsWhiteSpace(c))
+        return true;
+
+    // Разрешённые знаки препинания и спецсимволы
+    string allowedSymbols = ".,;:!?@#$%^&*()_+-=[]{}|\\/<>\u007e`'\"";
+
+    if (allowedSymbols.IndexOf(c) >= 0)
+        return true;
+
+    return false;
+}
 public static class EncodingAnalyzer
 {
     private static readonly Regex CyrillicPattern = new Regex(@"[\u0410-\u044F]");
@@ -67,6 +109,7 @@ public static class EncodingDetector
         try
         {
             // Пробуем исправить кодировку
+            byte[] bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(text);
             byte[] bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(text);
             return Encoding.UTF8.GetString(bytes);
         }
