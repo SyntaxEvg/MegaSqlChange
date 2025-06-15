@@ -3,6 +3,41 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
+public static class EncodingAnalyzer
+{
+    private static readonly Regex CyrillicPattern = new Regex(@"[\u0410-\u044F]");
+    private static readonly Regex BrokenUtf8Pattern = new Regex(@"Ð[°-яА-Я]|Ñ[°-яА-Я]");
+
+    public static bool NeedsFix(string text)
+    {
+        // Проверяем наличие битой UTF-8 кодировки
+        if (BrokenUtf8Pattern.IsMatch(text))
+            return true;
+
+        // Проверяем отсутствие кириллицы там, где она должна быть
+        if (!CyrillicPattern.IsMatch(text) && ContainsExpectedCyrillic(text))
+            return true;
+
+        return false;
+    }
+
+    private static bool ContainsExpectedCyrillic(string text)
+    {
+        // Проверяем наличие паттернов, которые обычно указывают на русский текст
+        var expectedPatterns = new[]
+        {
+            @"ов\b", // окончания фамилий
+            @"ич\b",
+            @"ский\b",
+            @"Ð\w+", // типичные паттерны битой кодировки
+            @"Ñ\w+"
+        };
+
+        return expectedPatterns.Any(pattern => Regex.IsMatch(text, pattern));
+    }
+}
+
+
 //ÀÂÃÆÇÉÈÊËÎÏÔŒÙÛÜŸàâãæçéèêëîïôœùûüÿÄÖÜẞßäöüÁÉÍÑÓÔÕÚÜáéíñóôõúüĄĆĘŁŃÓŚŹŻąćęłńóśźżÇĞİIÖŞÜçğıiöşü
 
 //public class ConsoleLogger : ILogger
