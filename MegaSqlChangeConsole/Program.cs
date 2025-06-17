@@ -60,55 +60,58 @@ namespace EFCoreTableScanner
                 }
 
                 // Получаем все записи для данной таблицы
-                var rows = await GetTableDataAsync(dbContext, tableName);
+                 var rows = await GetTableDataAsync(dbContext, tableName);
+                int pageSize = 1000; // Размер страницы
+                int totalRows = await GetTotalRowsCountAsync(dbContext, tableName);
 
-                // Получаем имя первичного ключа (если есть)
-                var primaryKeyColumn = await GetPrimaryKeyColumnAsync(dbContext, tableName);
-                foreach (var row in rows)
+                for (int offset = 0; offset < totalRows; offset += pageSize)
                 {
-                    bool rowModified = false;
-                    var updates = new Dictionary<string, string>();
-
-                    string rowId = primaryKeyColumn != null && row.ContainsKey(primaryKeyColumn)
-                        ? row[primaryKeyColumn].ToString()
-                        : "неизвестный ID";
-
-                    foreach (var column in stringColumns)
+                    var pageData = await GetTableDataPageAsync(dbContext, tableName, offset, pageSize);
+                    // Обработка полученной порции данных
+                    // await ProcessDataChunk(pageData);
+                    //}
+                    // Получаем имя первичного ключа (если есть)
+                    //var primaryKeyColumn = await GetPrimaryKeyColumnAsync(dbContext, tableName);
+                    foreach (var row in pageData)
                     {
-                        if (row.ContainsKey(column) && row[column] != null)
+                        bool rowModified = false;
+                        var updates = new Dictionary<string, string>();
+
+                        //string rowId = primaryKeyColumn != null && row.ContainsKey(primaryKeyColumn)
+                        //    ? row[primaryKeyColumn].ToString()
+                        //    : "неизвестный ID";
+
+                        foreach (var column in stringColumns)
                         {
-                            string value = row[column].ToString();
-                            
-                            if (!string.IsNullOrEmpty(value) && ContainsNonEnglishNonRussianChars(value))
+                            if (row.ContainsKey(column) && row[column] != null)
                             {
-                                Console.WriteLine($"  Найдены недопустимые символы в столбце '{column}', ID: {rowId}");
+                                string value = row[column].ToString();
 
-                                // Исправляем найденные проблемы
-                                string fixedValue = FixInvalidChars(value);
-                                updates[column] = fixedValue;
+                                if (!string.IsNullOrEmpty(value) && ContainsNonEnglishNonRussianChars(value))
+                                {
+                                    Console.WriteLine($"  Найдены недопустимые символы в столбце '{column}', ID: {rowId}");
 
-                                Console.WriteLine($"  Исправлено: '{value}' -> '{fixedValue}'");
-                                rowModified = true;
+                                    // Исправляем найденные проблемы
+                                    string fixedValue = FixInvalidChars(value);
+                                    updates[column] = fixedValue;
+
+                                    Console.WriteLine($"  Исправлено: '{value}' -> '{fixedValue}'");
+                                    rowModified = true;
+                                }
                             }
                         }
-                    }
 
-                    // Обновляем запись, если были найдены проблемы
-                    if (rowModified)
-                    {
-                        if (primaryKeyColumn != null && row.ContainsKey(primaryKeyColumn))
+                        // Обновляем запись, если были найдены проблемы
+                        if (rowModified)
                         {
-                            // Обновление по первичному ключу
-                            await UpdateRowAsync(dbContext, tableName, primaryKeyColumn, row[primaryKeyColumn], updates);
-                        }
-                        else
-                        {
-                            // Обновление по всем оригинальным значениям (как SSMS)
-                            var originalRow = row.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value);
-                            await UpdateRowLikeSSMSAsync(dbContext, tableName, originalRow, updates);
-                        }
+                           
+                                // Обновление по всем оригинальным значениям (как SSMS)
+                                var originalRow = row.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value);
+                                await UpdateRowLikeSSMSAsync(dbContext, tableName, originalRow, updates);
+                            
 
-                        tableModified = true;
+                            tableModified = true;
+                        }
                     }
                 }
 
@@ -229,16 +232,11 @@ namespace EFCoreTableScanner
         static async Task<List<Dictionary<string, object>>> GetTableDataAsync(DynamicDbContext dbContext, string tableName)
         {
             var rows = new List<Dictionary<string, object>>();
-
             string sql = $"SELECT * FROM {EscapeTableName(dbContext, tableName)}";
-
             using var command = dbContext.Database.GetDbConnection().CreateCommand();
             command.CommandText = sql;
-
             await dbContext.Database.OpenConnectionAsync();
-
             using var result = await command.ExecuteReaderAsync();
-
             while (await result.ReadAsync())
             {
                 var row = new Dictionary<string, object>();
@@ -252,7 +250,6 @@ namespace EFCoreTableScanner
 
                 rows.Add(row);
             }
-
             return rows;
         }
         public static bool ContainsFrenchOrTurkishChars(string text)
@@ -332,14 +329,72 @@ namespace EFCoreTableScanner
         // Экранирование имени таблицы в зависимости от СУБД
         static string EscapeTableName(DynamicDbContext dbContext, string tableName)
         {
-            return dbContext.Database.IsSqlServer()
-                ? $"[{tableName}]" : null
-                //: dbContext.Database.IsNpgsql()
-                //    ? $"\"{tableName}\""
-                //    : $"\"{tableName}\""
-                    ;
+            return dbContext.Database.IsSqlServer()? $"[{tableName}]" : null;
         }
+        // Метод для получения общего количества записей
+        static async Task<int> GetTotalRowsCountAsync(DynamicDbContext dbContext, string tableName)
+        {
+            string sql = $"SELECT COUNT(*) FROM {EscapeTableName(dbContext, tableName)}";
+            using var command = dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = sql;
+            await dbContext.Database.OpenConnectionAsync();
+            return Convert.ToInt32(await command.ExecuteScalarAsync());
+        }
+        // Метод для получения данных с пагинацией
+        static async Task<List<Dictionary<string, object>>> GetTableDataPageAsync(
+            DynamicDbContext dbContext,
+            string tableName,
+            int skip,
+            int take)
+        {
+            var rows = new List<Dictionary<string, object>>();
+            string sql = $@"
+        SELECT * FROM {EscapeTableName(dbContext, tableName)}
+        ORDER BY (SELECT NULL)
+        OFFSET {skip} ROWS
+        FETCH NEXT {take} ROWS ONLY";
 
+            using var command = dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = sql;
+
+            if (dbContext.Database.GetDbConnection().State != ConnectionState.Open)
+                await dbContext.Database.OpenConnectionAsync();
+
+            using var result = await command.ExecuteReaderAsync();
+            while (await result.ReadAsync())
+            {
+                var row = new Dictionary<string, object>();
+                for (int i = 0; i < result.FieldCount; i++)
+                {
+                    string columnName = result.GetName(i);
+                    object value = result.IsDBNull(i) ? null : result.GetValue(i);
+                    row[columnName] = value;
+                }
+                rows.Add(row);
+            }
+            return rows;
+        }
+        private async Task ProcessDataChunk(List<Dictionary<string, object>> dataChunk)
+        {
+            // Здесь ваша логика обработки порции данных
+            foreach (var row in dataChunk)
+            {
+                // Обработка каждой строки
+            }
+        }
+        // Пример использования:
+        //public async Task ProcessTableDataInChunks(DynamicDbContext dbContext, string tableName)
+        //{
+        //    int pageSize = 1000; // Размер страницы
+        //    int totalRows = await GetTotalRowsCountAsync(dbContext, tableName);
+
+        //    for (int offset = 0; offset < totalRows; offset += pageSize)
+        //    {
+        //        var pageData = await GetTableDataPageAsync(dbContext, tableName, offset, pageSize);
+        //        // Обработка полученной порции данных
+        //        await ProcessDataChunk(pageData);
+        //    }
+        //}
         // Экранирование имени столбца в зависимости от СУБД
         static string EscapeColumnName(DynamicDbContext dbContext, string columnName)
         {
