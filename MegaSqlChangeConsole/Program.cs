@@ -19,7 +19,14 @@ namespace EFCoreTableScanner
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-
+            Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("logs/log-.txt",
+        rollingInterval: RollingInterval.Day,
+        fileSizeLimitBytes: 500 * 1024 * 1024,
+        rollOnFileSizeLimit: true,
+        retainedFileCountLimit: 10,
+        shared: true)
+    .CreateLogger();
             // Загружаем конфигурацию из appsettings.json
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
