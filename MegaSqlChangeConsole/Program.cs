@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -109,7 +110,19 @@ class Program
             }
         }
 }
+USE master;
+        GO
 
+        ALTER DATABASE[TestDB]
+        SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+        GO
+
+        ALTER DATABASE[TestDB] MODIFY NAME = [NewTestDB];
+GO
+
+ALTER DATABASE[NewTestDB]
+SET MULTI_USER;
+GO
     static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
