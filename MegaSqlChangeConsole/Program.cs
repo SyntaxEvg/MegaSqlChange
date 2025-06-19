@@ -15,6 +15,29 @@ namespace EFCoreTableScanner
 {
     class Program
     {
+        bool IsHexString(string input)
+        {
+            return input.All(c => "0123456789ABCDEFabcdef".Contains(c));
+        }
+        bool IsPossibleHash(string input)
+        {
+            // Допустимые длины хешей (в символах)
+            int[] validLengths = { 11,8, 32, 40, 64, 128 };
+
+            // Проверка длины
+            if (!validLengths.Contains(input.Length))
+                return false;
+
+            // Проверка, что все символы — только 0-9 и A-F (в верхнем регистре)
+            foreach (char c in input)
+            {
+                if (!(char.IsDigit(c) || (c >= 'A' && c <= 'F')))
+                    return false;
+            }
+
+            return true;
+        }
+
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
