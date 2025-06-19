@@ -38,7 +38,79 @@ namespace EFCoreTableScanner
             return true;
         }
 
-        static async Task Main(string[] args)
+////        using Serilog;
+////using Serilog.Sinks.PeriodicBatching;
+////using Serilog.Events;
+
+////var batchingSink = new PeriodicBatchingSink(
+////    new Serilog.Sinks.File.FileSink("logs/log.txt", new Serilog.Formatting.Compact.CompactJsonFormatter(), null),
+////    new PeriodicBatchingSinkOptions
+////    {
+////        BatchSizeLimit = 100,              // максимум 100 логов в пакете
+////        Period = TimeSpan.FromSeconds(2),  // или каждые 2 секунды
+////        EagerlyEmitFirstEvent = true
+////    });
+
+////    Log.Logger = new LoggerConfiguration()
+////    .MinimumLevel.Debug()
+////    .WriteTo.Sink(batchingSink)
+////    .CreateLogger();
+using System;
+
+class Program
+    {
+        static void Main()
+        {
+            int lcid = 1033; // Пример LCID, можно заменить на любой другой
+
+            if (lcid == 0)
+            {
+                Console.WriteLine("Нейтральная локаль");
+            }
+            else if (lcid == 1033)
+            {
+                Console.WriteLine("Английский (США)");
+            }
+            else if (lcid == 2057)
+            {
+                Console.WriteLine("Английский (Великобритания)");
+            }
+            else if (lcid == 1036)
+            {
+                Console.WriteLine("Французский (Франция)");
+            }
+            else if (lcid == 1034)
+            {
+                Console.WriteLine("Испанский (Испания)");
+            }
+            else if (lcid == 1040)
+            {
+                Console.WriteLine("Итальянский (Италия)");
+            }
+            else if (lcid == 1031)
+            {
+                Console.WriteLine("Немецкий (Германия)");
+            }
+            else if (lcid == 1041)
+            {
+                Console.WriteLine("Японский (Япония)");
+            }
+            else if (lcid == 1043)
+            {
+                Console.WriteLine("Нидерландский (Нидерланды)");
+            }
+            else if (lcid == 1049)
+            {
+                Console.WriteLine("Русский (Россия)");
+            }
+            else
+            {
+                Console.WriteLine("Неизвестный LCID");
+            }
+        }
+}
+
+    static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Console.OutputEncoding = System.Text.Encoding.UTF8;
