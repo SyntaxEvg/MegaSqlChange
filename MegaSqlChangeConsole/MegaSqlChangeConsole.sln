@@ -5,8 +5,6 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MegaSqlChangeConsole", "MegaSqlChangeConsole.csproj", "{AFFD64C6-BA4E-498E-A208-FE4A4B118C92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "variantTranstext", "..\..\variantTranstext\variantTranstext.csproj", "{BF08BCC2-DA67-45C2-978B-631CE103BEAF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateRandomVideoId", "..\..\GenerateRandomVideoId\GenerateRandomVideoId.csproj", "{568A2847-6A99-42A0-B650-D4FD372AFB01}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{AFFD64C6-BA4E-498E-A208-FE4A4B118C92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFFD64C6-BA4E-498E-A208-FE4A4B118C92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFFD64C6-BA4E-498E-A208-FE4A4B118C92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF08BCC2-DA67-45C2-978B-631CE103BEAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF08BCC2-DA67-45C2-978B-631CE103BEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF08BCC2-DA67-45C2-978B-631CE103BEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF08BCC2-DA67-45C2-978B-631CE103BEAF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Release|Any CPU.ActiveCfg = Release|Any CPU

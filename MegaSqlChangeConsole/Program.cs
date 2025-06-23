@@ -110,19 +110,19 @@ class Program
             }
         }
 }
-USE master;
-        GO
+//USE master;
+//        GO
 
-        ALTER DATABASE[TestDB]
-        SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-        GO
+//        ALTER DATABASE[TestDB]
+//        SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+//        GO
 
-        ALTER DATABASE[TestDB] MODIFY NAME = [NewTestDB];
-GO
+//        ALTER DATABASE[TestDB] MODIFY NAME = [NewTestDB];
+//GO
 
-ALTER DATABASE[NewTestDB]
-SET MULTI_USER;
-GO
+//ALTER DATABASE[NewTestDB]
+//SET MULTI_USER;
+//GO
     static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

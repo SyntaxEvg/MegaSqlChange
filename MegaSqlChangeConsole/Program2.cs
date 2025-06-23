@@ -1,181 +1,156 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using BingXBotApi.DAL.Ctx;
+using BingXBotApi.DAL.Sqlite;
+using BingXBotApi.Model.ConfigBot;
+using BingXBotApi.Services.HostedService;
+using Extension.Base;
+using Loggers;
 using MegaSqlChangeConsole;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-
-class Program
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using TelegramBotClientXakzone;
+using TelegramBotClientXakzone.Interfaces;
+internal class Program
 {
-    static void Main1(string[] args)
+    public static string GetFileAssemb = Assembly.GetEntryAssembly().Location;
+    public static string AppFolder = Program.GetFileAssemb.Substring(0, Program.GetFileAssemb.LastIndexOf('\\') + 1);
+    public static Stopwatch Program_running_time = new Stopwatch();
+    private static WebApplicationBuilder builder;
+
+    private static void Main(string[] args)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        // Загружаем конфигурацию
-        var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false)
-            .Build();
+        //string applicationName = Assembly.GetEntryAssembly().GetName().Name;
+        builder = WebApplication.CreateBuilder(args);
+        Static.AppFolder = Program.AppFolder;
+        Program.Program_running_time.Start();
+        //Static.Program_running_time = Program.Program_running_time;
 
-        var connectionString = config.GetConnectionString("DefaultConnection");
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-        using var context = new AppDbContext(connectionString);
-        var connection = context.Database.GetDbConnection();
-        connection.Open();
+        // Настройка конфигурации
+        builder.Services.AddHttpClient();
+        builder.Services.AddSingleton<IBotLogger, BotLogger>();
+        //builder.Services.AddSingleton<IBotLoggerFactory, BotLoggerFactory>();
+        builder.Services.AddSingleton<IBotLoggerFactory>(provider =>
+                                new BotLoggerFactory(Assembly.GetEntryAssembly().GetName().Name, provider.GetRequiredService<IServiceScopeFactory>()));
+        builder.Services.Configure<BingX>(builder.Configuration.GetSection("BingX"));
+        builder.Services.Configure<Bot>(builder.Configuration.GetSection("Bot"));
+        builder.Services.Configure<TelBot>(builder.Configuration.GetSection("TelBot"));
+        builder.Services.AddHostedService<BotHostedService>(); //сервис для запуска фарма
+        // Регистрация сервисов
+        builder.Services.AddSingleton<BingXService>();
+        builder.Services.AddSingleton<BotService>();
+        builder.Services.AddSingleton<IOptionsMonitor<TelBot>, OptionsMonitor<TelBot>>();
+        builder.Services.AddSingleton<ITelegramBotSimple, TelegramBotSimpleExample>();
 
-        var tables = GetAllTables(connection);
+        ConfigurationsDB(builder.Services);
+        var app = builder.Build();
 
-        foreach (var table in tables)
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        app.UseAuthorization();
+        app.MapControllers();
+        app.Run();
+    }
+    /// <summary>
+    /// Конфигурация баз данных
+    /// </summary>
+    public static void ConfigurationsDB(IServiceCollection services)
+    {
+
+
+        var connectionType = builder.Configuration["SettingBD:SelectDB"];
+        //builder.Configuration.AddJsonFile("fewf",true,true);
+        var RemoveDB = builder.Configuration["SettingBD:RemoveDB"]!.StringToBool();//UtilExtension 
+        var connection_string = builder.Configuration["SettingBD:ConnectionStrings:" + connectionType];
+        switch (connectionType)
         {
-            Console.WriteLine($"Таблица: {table.Schema}.{table.Name}");
+            case "SqlServer":
+            case "RetrainConnectionString":
+                //services.UseSqlServer(connection_string);
+                break;
+            case "Postgres":
+                throw new InvalidOperationException($"Тип БД не поддерживается: {connectionType}");
+                //services.UseNpgsql(connection_string);
+                break;
+            case "Sqlite":
+                //throw new InvalidOperationException($"Тип БД не поддерживается: {connectionType}");
+                var serviceProvider = services.UseSqlite(connection_string);
+                var dbContext = serviceProvider.GetRequiredService<AppDBContext>();
+                dbContext.Database.Migrate(); //замена вызова миграции каждый раз 
 
-            var stringColumns = GetStringColumns(connection, table.Schema, table.Name);
-            if (stringColumns.Count == 0)
-            {
-                Console.WriteLine("  Нет строковых колонок.");
-                continue;
-            }
+                break;
+            default:
+                throw new InvalidOperationException($"Тип БД не поддерживается: {connectionType}");
 
-            var rows = GetTableData(connection, table.Schema, table.Name, stringColumns);
-            int updatedCount = 0;
-
-            foreach (var row in rows)
-            {
-                var id = row["Id"];
-                bool hasChanges = false;
-                var updates = new Dictionary<string, string>();
-
-                foreach (var column in stringColumns)
-                {
-                    var value = row[column] as string;
-                    if (!string.IsNullOrEmpty(value) && ContainsInvalidCharacters(value))
-                    {
-                        Console.WriteLine($"  Найдено поле: {column} = {value}");
-                        var fixedValue = FixInvalidCharacters(value);
-                        updates[column] = fixedValue;
-                        hasChanges = true;
-                    }
-                }
-
-                if (hasChanges)
-                {
-                    UpdateRow(connection, table.Schema, table.Name, updates, id);
-                    updatedCount++;
-                }
-            }
-
-            Console.WriteLine($"  Обновлено строк: {updatedCount}");
         }
+        //var serviceProvider = new ServiceCollection()
+        //        .AddDbContext<AppDBContext>()
+        //        .BuildServiceProvider();
 
-        Console.WriteLine("Обработка завершена.");
-    }
 
-    static List<(string Schema, string Name)> GetAllTables(IDbConnection connection)
-    {
-        var result = new List<(string, string)>();
-        using var cmd = connection.CreateCommand();
-        cmd.CommandText = @"
-            SELECT TABLE_SCHEMA, TABLE_NAME 
-            FROM INFORMATION_SCHEMA.TABLES 
-            WHERE TABLE_TYPE = 'BASE TABLE'";
+        ///Рецепт по Intialization миграции
+        ///перед каждой миграцией прописывать DBServer из appconfig -тип (switch)кейса для миграции
+        //Add-Migration Initial -v Update-Database Terminal 
+        //для каждой таблицы в проекте которая прописана в конфиге.выбираем проекты по умолчанию
 
-        using var reader = cmd.ExecuteReader();
-        while (reader.Read())
-        {
-            result.Add((reader.GetString(0), reader.GetString(1)));
-        }
-
-        return result;
-    }
-
-    static List<string> GetStringColumns(IDbConnection connection, string schema, string table)
-    {
-        var result = new List<string>();
-        using var cmd = connection.CreateCommand();
-        cmd.CommandText = @"
-            SELECT COLUMN_NAME 
-            FROM INFORMATION_SCHEMA.COLUMNS 
-            WHERE TABLE_SCHEMA = @schema AND TABLE_NAME = @table
-            AND DATA_TYPE IN ('nvarchar', 'varchar', 'text', 'ntext')";
-
-        var param1 = cmd.CreateParameter();
-        param1.ParameterName = "@schema";
-        param1.Value = schema;
-        cmd.Parameters.Add(param1);
-
-        var param2 = cmd.CreateParameter();
-        param2.ParameterName = "@table";
-        param2.Value = table;
-        cmd.Parameters.Add(param2);
-
-        using var reader = cmd.ExecuteReader();
-        while (reader.Read())
-        {
-            result.Add(reader.GetString(0));
-        }
-
-        return result;
-    }
-
-    static List<Dictionary<string, object>> GetTableData(IDbConnection connection, string schema, string table, List<string> columns)
-    {
-        var result = new List<Dictionary<string, object>>();
-
-        var columnList = string.Join(", ", columns.Select(c => $"[{c}]"));
-        var sql = $"SELECT Id, {columnList} FROM [{schema}].[{table}]";
-
-        using var cmd = connection.CreateCommand();
-        cmd.CommandText = sql;
-
-        using var reader = cmd.ExecuteReader();
-        while (reader.Read())
-        {
-            var row = new Dictionary<string, object>();
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                row[reader.GetName(i)] = reader.GetValue(i);
-            }
-            result.Add(row);
-        }
-
-        return result;
-    }
-
-    static void UpdateRow(IDbConnection connection, string schema, string table, Dictionary<string, string> updates, object id)
-    {
-        var setClause = string.Join(", ", updates.Keys.Select(k => $"[{k}] = @{k}"));
-        var sql = $"UPDATE [{schema}].[{table}] SET {setClause} WHERE Id = @Id";
-
-        using var cmd = connection.CreateCommand();
-        cmd.CommandText = sql;
-
-        foreach (var kvp in updates)
-        {
-            var param = cmd.CreateParameter();
-            param.ParameterName = $"@{kvp.Key}";
-            param.Value = kvp.Value;
-            cmd.Parameters.Add(param);
-        }
-
-        var idParam = cmd.CreateParameter();
-        idParam.ParameterName = "@Id";
-        idParam.Value = id;
-        cmd.Parameters.Add(idParam);
-
-        cmd.ExecuteNonQuery();
-    }
-
-    static bool ContainsInvalidCharacters(string input)
-    {
-        return Regex.IsMatch(input, @"[^a-zA-Zа-яА-Я0-9\s]");
-    }
-
-    static string FixInvalidCharacters(string input)
-    {
-        return Regex.Replace(input, @"[^a-zA-Zа-яА-Я0-9\s]", "");
     }
 }
+===============================
+//<Project Sdk="Microsoft.NET.Sdk.Web">
+
+//  <PropertyGroup>
+//    <TargetFramework>net8.0</TargetFramework>
+//    <Nullable>enable</Nullable>
+//    <ImplicitUsings>enable</ImplicitUsings>
+//  </PropertyGroup>
+
+//  <ItemGroup>
+//    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+//  </ItemGroup>
+//	<ItemGroup>
+//		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+//			<PrivateAssets>all</PrivateAssets>
+//			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+//		</PackageReference>
+//		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+//			<PrivateAssets>all</PrivateAssets>
+//			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+//		</PackageReference>
+//		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
+//		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.0" />
+//	</ItemGroup>
+//  <ItemGroup>
+//    <ProjectReference Include="..\..\..\..\..\Repos\repos\AutoBotsTap\Loggers\Loggers.csproj" />
+//    <ProjectReference Include="..\CommonCore\CommonCore.csproj" />
+//    <ProjectReference Include="..\TelegramBotClientXakzone\TelegramBotClientXakzone.csproj" />
+//  </ItemGroup>
+//  <ItemGroup>
+//    <None Update="BingXBotApi.db">
+//      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+//    </None>
+//    <None Update="BingXBotApi.db-shm">
+//      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+//    </None>
+//    <None Update="BingXBotApi.db-wal">
+//      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+//    </None>
+//  </ItemGroup>
+
+//</Project>
