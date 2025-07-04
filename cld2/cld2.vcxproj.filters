@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="sys">
+      <UniqueIdentifier>{4eaa6413-c1c5-4186-b780-9566b409bcee}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_compat.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_data.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_data_extractor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_data_loader.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2tablesummary.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cldutil.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cldutil_offline.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cldutil_shared.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compact_lang_det_hint_code.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compact_lang_det_impl.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\debug.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\fixunicodevalue.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\generated_language.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\generated_ulscript.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\getonescriptspan.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\integral_types.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\lang_script.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\langspan.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\offsetmap.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\port.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\scoreonescriptspan.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\stringpiece.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\tote.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\unittest_data.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\utf8acceptinterchange.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\utf8prop_lettermarkscriptnum.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\utf8repl_lettermarklower.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\utf8scannot_lettermarkspecial.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\utf8statetable.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="mman.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cld2.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld_generated_cjk_delta_bi_4.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld_generated_cjk_delta_bi_32.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld_generated_cjk_uni_prop_80.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld_generated_score_quad_octa_2.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld_generated_score_quad_octa_0122.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld_generated_score_quad_octa_0122_2.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld_generated_score_quad_octa_1024_256.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_do_score.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_data.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_data_extractor.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_data_loader.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_dynamic_data_tool.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_cjk_compatible.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_deltaocta0122.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_deltaocta0527.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_deltaoctachrome.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_distinctocta0122.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_distinctocta0527.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_distinctoctachrome.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_octa2_dummy.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_quad0122.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_quad0720.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_quadchrome_2.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_generated_quadchrome_16.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_unittest.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cld2_unittest_full.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cldutil.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cldutil_offline.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\cldutil_shared.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compact_lang_det.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compact_lang_det_hint_code.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compact_lang_det_impl.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compact_lang_det_test.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\debug.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\debug_empty.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\fixunicodevalue.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\generated_distinct_bi_0.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\generated_entities.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\generated_language.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\generated_ulscript.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\getonescriptspan.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\lang_script.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\offsetmap.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\scoreonescriptspan.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\scoreutf8text.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\tote.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\utf8statetable.cc">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\clean.sh" />
+    <None Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compile.sh" />
+    <None Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compile_and_test_all.sh" />
+    <None Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compile_dynamic.sh" />
+    <None Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compile_full.sh" />
+    <None Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\compile_libs.sh" />
+    <None Include="..\..\..\..\..\..\SAVEYANDEX\1cld2-master\cld2-master\internal\test_shuffle_1000_48_666.utf8.gz" />
+  </ItemGroup>
+</Project>

@@ -3,102 +3,105 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-public static void DecodeString(string input)
-{
-    try
-    {
-        // Способ 1: Через Windows-1252 в UTF-8
-        byte[] bytes = Encoding.GetEncoding("Windows-1252").GetBytes(input);
-        string result1 = Encoding.UTF8.GetString(bytes);
-        Console.WriteLine("Способ 1: " + result1);
 
-        // Способ 2: Двойное декодирование UTF-8
-        byte[] utf8Bytes = Encoding.UTF8.GetBytes(input);
-        string result2 = Encoding.UTF8.GetString(utf8Bytes);
-        Console.WriteLine("Способ 2: " + result2);
 
-        // Способ 3: ISO-8859-1 в UTF-8
-        byte[] isoBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
-        string result3 = Encoding.UTF8.GetString(isoBytes);
-        Console.WriteLine("Способ 3: " + result3);
 
-        // Способ 4: Попытка исправить двойное кодирование UTF-8
-        byte[] bytes4 = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
-        string intermediate = Encoding.UTF8.GetString(bytes4);
-        byte[] bytes4_2 = Encoding.GetEncoding("ISO-8859-1").GetBytes(intermediate);
-        string result4 = Encoding.UTF8.GetString(bytes4_2);
-        Console.WriteLine("Способ 4: " + result4);
+//public static void DecodeString(string input)
+//{
+//    try
+//    {
+//        // Способ 1: Через Windows-1252 в UTF-8
+//        byte[] bytes = Encoding.GetEncoding("Windows-1252").GetBytes(input);
+//        string result1 = Encoding.UTF8.GetString(bytes);
+//        Console.WriteLine("Способ 1: " + result1);
 
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Ошибка: {ex.Message}");
-    }
-}
+//        // Способ 2: Двойное декодирование UTF-8
+//        byte[] utf8Bytes = Encoding.UTF8.GetBytes(input);
+//        string result2 = Encoding.UTF8.GetString(utf8Bytes);
+//        Console.WriteLine("Способ 2: " + result2);
 
-foreach (var encInfo in Encoding.GetEncodings())
-{
-    try
-    {
-        Encoding encoding = encInfo.GetEncoding();
+//        // Способ 3: ISO-8859-1 в UTF-8
+//        byte[] isoBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
+//        string result3 = Encoding.UTF8.GetString(isoBytes);
+//        Console.WriteLine("Способ 3: " + result3);
 
-        string decoded = encoding.GetString(bytes);
+//        // Способ 4: Попытка исправить двойное кодирование UTF-8
+//        byte[] bytes4 = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
+//        string intermediate = Encoding.UTF8.GetString(bytes4);
+//        byte[] bytes4_2 = Encoding.GetEncoding("ISO-8859-1").GetBytes(intermediate);
+//        string result4 = Encoding.UTF8.GetString(bytes4_2);
+//        Console.WriteLine("Способ 4: " + result4);
 
-        // Фильтрация: покажем только читаемые строки
-        if (ContainsReadableText(decoded))
-        {
-            Console.WriteLine($"[{encoding.CodePage}] {encoding.EncodingName} ({encoding.WebName})");
-            Console.WriteLine($"→ {decoded}");
-            Console.WriteLine(new string('-', 50));
-        }
-    }
-    catch (Exception ex)
-    {
-        // Некоторые кодировки могут не поддерживаться или вызвать ошибку
-        Console.WriteLine($"Ошибка при использовании кодировки {encInfo.Name}: {ex.Message}");
-    }
-}
-static string CleanString(string input)
-{
-    StringBuilder sb = new StringBuilder(input.Length);
+//    }
+//    catch (Exception ex)
+//    {
+//        Console.WriteLine($"Ошибка: {ex.Message}");
+//    }
+//}
 
-    foreach (char c in input)
-    {
-        if (IsAllowedChar(c))
-        {
-            sb.Append(c);
-        }
-    }
+//foreach (var encInfo in Encoding.GetEncodings())
+//{
+//    try
+//    {
+//        Encoding encoding = encInfo.GetEncoding();
 
-    return sb.ToString();
-}
+//        string decoded = encoding.GetString(bytes);
 
-static bool IsAllowedChar(char c)
-{
-    // Латиница
-    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-        return true;
+//        // Фильтрация: покажем только читаемые строки
+//        if (ContainsReadableText(decoded))
+//        {
+//            Console.WriteLine($"[{encoding.CodePage}] {encoding.EncodingName} ({encoding.WebName})");
+//            Console.WriteLine($"→ {decoded}");
+//            Console.WriteLine(new string('-', 50));
+//        }
+//    }
+//    catch (Exception ex)
+//    {
+//        // Некоторые кодировки могут не поддерживаться или вызвать ошибку
+//        Console.WriteLine($"Ошибка при использовании кодировки {encInfo.Name}: {ex.Message}");
+//    }
+//}
+//static string CleanString(string input)
+//{
+//    StringBuilder sb = new StringBuilder(input.Length);
 
-    // Кириллица (включая ё и Ё)
-    if ((c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || c == 'ё' || c == 'Ё')
-        return true;
+//    foreach (char c in input)
+//    {
+//        if (IsAllowedChar(c))
+//        {
+//            sb.Append(c);
+//        }
+//    }
 
-    // Цифры
-    if (c >= '0' && c <= '9')
-        return true;
+//    return sb.ToString();
+//}
 
-    // Пробельные символы
-    if (char.IsWhiteSpace(c))
-        return true;
+//static bool IsAllowedChar(char c)
+//{
+//    // Латиница
+//    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+//        return true;
 
-    // Разрешённые знаки препинания и спецсимволы
-    string allowedSymbols = ".,;:!?@#$%^&*()_+-=[]{}|\\/<>\u007e`'\"";
+//    // Кириллица (включая ё и Ё)
+//    if ((c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || c == 'ё' || c == 'Ё')
+//        return true;
 
-    if (allowedSymbols.IndexOf(c) >= 0)
-        return true;
+//    // Цифры
+//    if (c >= '0' && c <= '9')
+//        return true;
 
-    return false;
-}
+//    // Пробельные символы
+//    if (char.IsWhiteSpace(c))
+//        return true;
+
+//    // Разрешённые знаки препинания и спецсимволы
+//    string allowedSymbols = ".,;:!?@#$%^&*()_+-=[]{}|\\/<>\u007e`'\"";
+
+//    if (allowedSymbols.IndexOf(c) >= 0)
+//        return true;
+
+//    return false;
+//}
 public static class EncodingAnalyzer
 {
     private static readonly Regex CyrillicPattern = new Regex(@"[\u0410-\u044F]");
@@ -164,7 +167,7 @@ public static class EncodingDetector
         {
             // Пробуем исправить кодировку
             byte[] bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(text);
-            byte[] bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(text);
+            //byte[] bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(text);
             return Encoding.UTF8.GetString(bytes);
         }
         catch

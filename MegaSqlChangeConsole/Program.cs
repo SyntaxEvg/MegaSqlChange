@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LiteMiner.classes;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -14,30 +15,30 @@ using System.Threading.Tasks;
 
 namespace EFCoreTableScanner
 {
-    class Program
-    {
-        bool IsHexString(string input)
-        {
-            return input.All(c => "0123456789ABCDEFabcdef".Contains(c));
-        }
-        bool IsPossibleHash(string input)
-        {
-            // Допустимые длины хешей (в символах)
-            int[] validLengths = { 11,8, 32, 40, 64, 128 };
+    //class Program
+    //{
+        //bool IsHexString(string input)
+        //{
+        //    return input.All(c => "0123456789ABCDEFabcdef".Contains(c));
+        //}
+        //bool IsPossibleHash(string input)
+        //{
+        //    // Допустимые длины хешей (в символах)
+        //    int[] validLengths = { 11,8, 32, 40, 64, 128 };
 
-            // Проверка длины
-            if (!validLengths.Contains(input.Length))
-                return false;
+        //    // Проверка длины
+        //    if (!validLengths.Contains(input.Length))
+        //        return false;
 
-            // Проверка, что все символы — только 0-9 и A-F (в верхнем регистре)
-            foreach (char c in input)
-            {
-                if (!(char.IsDigit(c) || (c >= 'A' && c <= 'F')))
-                    return false;
-            }
+        //    // Проверка, что все символы — только 0-9 и A-F (в верхнем регистре)
+        //    foreach (char c in input)
+        //    {
+        //        if (!(char.IsDigit(c) || (c >= 'A' && c <= 'F')))
+        //            return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
 ////        using Serilog;
 ////using Serilog.Sinks.PeriodicBatching;
@@ -56,60 +57,59 @@ namespace EFCoreTableScanner
 ////    .MinimumLevel.Debug()
 ////    .WriteTo.Sink(batchingSink)
 ////    .CreateLogger();
-using System;
 
 class Program
     {
-        static void Main()
-        {
-            int lcid = 1033; // Пример LCID, можно заменить на любой другой
+        //static void Main()
+        //{
+        //    int lcid = 1033; // Пример LCID, можно заменить на любой другой
 
-            if (lcid == 0)
-            {
-                Console.WriteLine("Нейтральная локаль");
-            }
-            else if (lcid == 1033)
-            {
-                Console.WriteLine("Английский (США)");
-            }
-            else if (lcid == 2057)
-            {
-                Console.WriteLine("Английский (Великобритания)");
-            }
-            else if (lcid == 1036)
-            {
-                Console.WriteLine("Французский (Франция)");
-            }
-            else if (lcid == 1034)
-            {
-                Console.WriteLine("Испанский (Испания)");
-            }
-            else if (lcid == 1040)
-            {
-                Console.WriteLine("Итальянский (Италия)");
-            }
-            else if (lcid == 1031)
-            {
-                Console.WriteLine("Немецкий (Германия)");
-            }
-            else if (lcid == 1041)
-            {
-                Console.WriteLine("Японский (Япония)");
-            }
-            else if (lcid == 1043)
-            {
-                Console.WriteLine("Нидерландский (Нидерланды)");
-            }
-            else if (lcid == 1049)
-            {
-                Console.WriteLine("Русский (Россия)");
-            }
-            else
-            {
-                Console.WriteLine("Неизвестный LCID");
-            }
-        }
-}
+        //    if (lcid == 0)
+        //    {
+        //        Console.WriteLine("Нейтральная локаль");
+        //    }
+        //    else if (lcid == 1033)
+        //    {
+        //        Console.WriteLine("Английский (США)");
+        //    }
+        //    else if (lcid == 2057)
+        //    {
+        //        Console.WriteLine("Английский (Великобритания)");
+        //    }
+        //    else if (lcid == 1036)
+        //    {
+        //        Console.WriteLine("Французский (Франция)");
+        //    }
+        //    else if (lcid == 1034)
+        //    {
+        //        Console.WriteLine("Испанский (Испания)");
+        //    }
+        //    else if (lcid == 1040)
+        //    {
+        //        Console.WriteLine("Итальянский (Италия)");
+        //    }
+        //    else if (lcid == 1031)
+        //    {
+        //        Console.WriteLine("Немецкий (Германия)");
+        //    }
+        //    else if (lcid == 1041)
+        //    {
+        //        Console.WriteLine("Японский (Япония)");
+        //    }
+        //    else if (lcid == 1043)
+        //    {
+        //        Console.WriteLine("Нидерландский (Нидерланды)");
+        //    }
+        //    else if (lcid == 1049)
+        //    {
+        //        Console.WriteLine("Русский (Россия)");
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Неизвестный LCID");
+        //    }
+        //}
+//}
 //USE master;
 //        GO
 
@@ -125,16 +125,16 @@ class Program
 //GO
     static async Task Main(string[] args)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Log.Logger = new LoggerConfiguration()
-    .WriteTo.File("logs/log-.txt",
-        rollingInterval: RollingInterval.Day,
-        fileSizeLimitBytes: 500 * 1024 * 1024,
-        rollOnFileSizeLimit: true,
-        retainedFileCountLimit: 10,
-        shared: true)
-    .CreateLogger();
+    //        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    //        Console.OutputEncoding = System.Text.Encoding.UTF8;
+    //        Log.Logger = new LoggerConfiguration()
+    //.WriteTo.File("logs/log-.txt",
+    //    rollingInterval: RollingInterval.Day,
+    //    fileSizeLimitBytes: 500 * 1024 * 1024,
+    //    rollOnFileSizeLimit: true,
+    //    retainedFileCountLimit: 10,
+    //    shared: true)
+    //.CreateLogger();
             // Загружаем конфигурацию из appsettings.json
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -149,6 +149,18 @@ class Program
                 Console.WriteLine("Ошибка: строка подключения не найдена в appsettings.json");
                 return;
             }
+
+            string str = "Microsoft-Technologien привет мир";
+
+            var lang = new LanguageDetector();
+            foreach (var item in str.Split(" "))
+            {
+                var t = lang.Detect(item);
+                var t1 = lang.GetLanguageNameByCode(t);
+                Console.WriteLine(t1);
+            }
+           
+
 
             // Создаем динамический контекст
             using var dbContext = new DynamicDbContext(connectionString);
@@ -204,7 +216,7 @@ class Program
 
                                 if (!string.IsNullOrEmpty(value) && ContainsNonEnglishNonRussianChars(value))
                                 {
-                                    Console.WriteLine($"  Найдены недопустимые символы в столбце '{column}', ID: {rowId}");
+                                   // Console.WriteLine($"  Найдены недопустимые символы в столбце '{column}', ID: {rowId}");
 
                                     // Исправляем найденные проблемы
                                     string fixedValue = FixInvalidChars(value);

@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MegaSqlChangeConsole", "Meg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateRandomVideoId", "..\..\GenerateRandomVideoId\GenerateRandomVideoId.csproj", "{568A2847-6A99-42A0-B650-D4FD372AFB01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangeDetector", "..\..\LangeDetector\LangeDetector.csproj", "{6C58A8C0-7017-416F-AC9C-794359CF9FF0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cld2", "..\cld2\cld2.vcxproj", "{5B80D386-D0B2-4512-97DC-87DDA64D2C7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lMkITlANG", "..\lMkITlANG\lMkITlANG.csproj", "{AF90CEFB-71DD-4363-A177-E44E0C431633}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +27,23 @@ Global
 		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{568A2847-6A99-42A0-B650-D4FD372AFB01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C58A8C0-7017-416F-AC9C-794359CF9FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C58A8C0-7017-416F-AC9C-794359CF9FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C58A8C0-7017-416F-AC9C-794359CF9FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C58A8C0-7017-416F-AC9C-794359CF9FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B80D386-D0B2-4512-97DC-87DDA64D2C7E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{5B80D386-D0B2-4512-97DC-87DDA64D2C7E}.Debug|Any CPU.Build.0 = Debug|x64
+		{5B80D386-D0B2-4512-97DC-87DDA64D2C7E}.Release|Any CPU.ActiveCfg = Release|x64
+		{5B80D386-D0B2-4512-97DC-87DDA64D2C7E}.Release|Any CPU.Build.0 = Release|x64
+		{AF90CEFB-71DD-4363-A177-E44E0C431633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF90CEFB-71DD-4363-A177-E44E0C431633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF90CEFB-71DD-4363-A177-E44E0C431633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF90CEFB-71DD-4363-A177-E44E0C431633}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DDBE04C7-B4C0-482E-A5E6-3D769B487D58}
 	EndGlobalSection
 EndGlobal
