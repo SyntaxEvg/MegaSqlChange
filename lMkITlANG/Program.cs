@@ -57,7 +57,7 @@ namespace translator
         {
             // Set an optional license key here if available. 
           
-            LMKit.Licensing.LicenseManager.SetLicenseKey("019A510-180615-C694FC-832E61-A2D000-00A858-468995-310904-704070-EA");
+            LMKit.Licensing.LicenseManager.SetLicenseKey("019A5810-180615-C694FC-832E61-A2D000-00A858-468995-310904-704070-EA");
             LMKit.Global.Runtime.EnableCuda = false;
             LMKit.Global.Configuration.EnableKVCacheRecycling = true;
             LMKit.Global.Configuration.EnableTokenHealing = true;
