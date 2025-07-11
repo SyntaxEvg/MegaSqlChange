@@ -57,14 +57,18 @@ namespace translator
         {
             // Set an optional license key here if available. 
           
-            LMKit.Licensing.LicenseManager.SetLicenseKey("019A500-180615-C694FC-832E61-A2D000-00A858-468995-310904-704070-EA");
+            LMKit.Licensing.LicenseManager.SetLicenseKey("019A510-180615-C694FC-832E61-A2D000-00A858-468995-310904-704070-EA");
             LMKit.Global.Runtime.EnableCuda = false;
+            LMKit.Global.Configuration.EnableKVCacheRecycling = true;
+            LMKit.Global.Configuration.EnableTokenHealing = true;
+
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
             Language destLanguage = Language.English; //set destination language supported by your model here.
 
             //Uri modelUri = new(DEFAULT_PHI4_MINI_3_1B_MODEL_PATH);
             Uri modelUri = new(@"C:\ModelGGUF\Phi-4-mini-Instruct-Q3_K_S.gguf");
+            //Uri modelUri = new(@"C:\ModelGGUF\bge-m3-Q4_K_M.gguf");
             LM model = new(modelUri, 
                 //storagePath: @"C:\ModelGGUF\",
                                     deviceConfiguration: new LM.DeviceConfiguration() { GpuLayerCount = 0 },
@@ -73,7 +77,9 @@ namespace translator
 
             Console.Clear();
             TextTranslation translator = new(model);
+            float score = DeviceConfiguration.GetPerformanceScore(model);
 
+            Console.WriteLine($"Performance Score: {score}");
             translator.AfterTextCompletion += Translation_AfterTextCompletion;
             int translationCount = 0;
 
