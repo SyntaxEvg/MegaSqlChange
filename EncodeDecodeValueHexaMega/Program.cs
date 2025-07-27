@@ -7,9 +7,6 @@ using System.Text;
 public class IdConvertor : IIdConvertor
 {
     const string ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz()";
-
-
-
     /// <summary>
     /// +
     /// </summary>
@@ -81,15 +78,10 @@ public class IdConvertor : IIdConvertor
     /// <returns></returns>
     public string FromLong_cn64(ulong value)
     {
-        
-        // Преобразуем ulong в массив байтов (8 байт)
         byte[] valueBytes = BitConverter.GetBytes(value);
-
-        // Приводим к big-endian
         if (BitConverter.IsLittleEndian)
             Array.Reverse(valueBytes);
 
-        // Создаём буфер из 9 байт: 8 байт значения + 1 байт контрольной суммы
         byte[] buffer = new byte[9];
         byte checksum = 0;
 
@@ -100,19 +92,15 @@ public class IdConvertor : IIdConvertor
         }
 
         buffer[8] = checksum;
-
         // Кодируем 9 байт в 12 символов (каждые 3 байта → 4 символа)
         StringBuilder result = new StringBuilder(13); // 12 символов + '\0'
-
         for (int i = 0; i < 9; i += 3)
         {
             int acc = (buffer[i] << 16) | (buffer[i + 1] << 8) | buffer[i + 2];
-
             for (int j = 0; j < 4; j++)
             {
                 int sixBits = acc & 0x3F;
                 acc >>= 6;
-
                 char symbol;
                 if (sixBits < 10)
                     symbol = (char)('0' + sixBits);
@@ -122,11 +110,9 @@ public class IdConvertor : IIdConvertor
                     symbol = (char)('a' + (sixBits - 36));
                 else
                     symbol = (char)('(' + (sixBits - 62)); // 62 → '(', 63 → ')'
-
                 result.Append(symbol);
             }
         }
-
         return FixGcn64Order(result.ToString());
     }
     string FixGcn64Order(ReadOnlySpan<char> input)
