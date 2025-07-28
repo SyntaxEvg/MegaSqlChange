@@ -187,3 +187,4 @@ string FixBrokenText(string input, Dictionary<string, string> map)
     }
     return input;
 }
+string pattern = "[äöüÄÖÜß]";
